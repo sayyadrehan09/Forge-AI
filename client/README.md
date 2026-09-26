@@ -1,16 +1,48 @@
-# React + Vite
+# ForgeAI 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ForgeAI is a full-stack AI platform built to explore and understand modern AI application development.
 
-Currently, two official plugins are available:
+The project combines **MERN stack development, LLMs, RAG, AI agents, tool calling, and model experimentation** into one platform.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎯 Goal
 
-## React Compiler
+The goal of ForgeAI is not just to call an AI API, but to understand how modern AI systems are built from the ground up.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+### Frontend
+- React.js
+- Vite
+- JavaScript
+- CSS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend
+- Node.js
+- Express.js
+- REST APIs
+
+### Database
+- MongoDB
+- Mongoose
+
+### AI / GenAI
+- Large Language Models (LLMs)
+- Prompt Engineering
+- Embeddings
+- Retrieval-Augmented Generation (RAG)
+- Tool Calling
+- AI Agents
+- Model Evaluation
+
+## 🏗️ Current Architecture
+
+```text
+ForgeAI
+│
+├── client/
+│   └── React + Vite
+│
+└── server/
+    ├── Node.js
+    ├── Express.js
+    └── MongoDB
