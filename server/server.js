@@ -14,6 +14,13 @@ app.get("/api/test", (req, res) => {
     message: "ForgeAI backend is running 🚀",
   });
 });
+// Health check API
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "OK",
+    service: "ForgeAI Backend",
+  });
+});
 
 // Connect to MongoDB
 mongoose
