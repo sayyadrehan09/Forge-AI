@@ -63,3 +63,24 @@ mongoose
     });
   }
 });
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash-lite",
+      contents: message,
+    });
+
+    res.json({
+      reply: response.text,
+    });
+  } catch (error) {
+    console.error("Chat error:", error.message);
+
+    res.status(500).json({
+      error: "AI request failed",
+    });
+  }
+});
