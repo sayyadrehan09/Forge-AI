@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
-
+import Chat from "./models/chat.js";
 dotenv.config();
 
 const app = express();
@@ -62,19 +62,49 @@ mongoose
       error: "AI request failed",
     });
   }
-});
-
-app.post("/api/chat", async (req, res) => {
+});app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        error: "Message is required",
+      });
+    }
+
+    console.log("Received message:", message);
+
+    const chat = new Chat({
+      messages: [
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+    });
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash-lite",
       contents: message,
     });
 
+    const reply = response.text;
+
+    console.log("Gemini replied");
+
+    chat.messages.push({
+      role: "assistant",
+      content: reply,
+    });
+
+    console.log("Saving chat...");
+
+    await chat.save();
+
+    console.log("Chat saved successfully:", chat._id);
+
     res.json({
-      reply: response.text,
+      reply,
     });
   } catch (error) {
     console.error("Chat error:", error.message);
