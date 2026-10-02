@@ -62,9 +62,11 @@ mongoose
       error: "AI request failed",
     });
   }
-});app.post("/api/chat", async (req, res) => {
+});
+
+app.post("/api/chat", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, chatId } = req.body;
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -72,39 +74,54 @@ mongoose
       });
     }
 
-    console.log("Received message:", message);
+    let chat;
 
-    const chat = new Chat({
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
+    // If chatId exists, continue the existing chat
+    if (chatId) {
+      chat = await Chat.findById(chatId);
+
+      if (!chat) {
+        return res.status(404).json({
+          error: "Chat not found",
+        });
+      }
+    } else {
+      // Otherwise create a new chat
+      chat = new Chat({
+        messages: [],
+      });
+    }
+
+    // Add user's message
+    chat.messages.push({
+      role: "user",
+      content: message,
     });
+
+    // Send conversation history to Gemini
+    const contents = chat.messages.map((msg) => ({
+      role: msg.role === "assistant" ? "model" : "user",
+      parts: [{ text: msg.content }],
+    }));
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash-lite",
-      contents: message,
+      contents,
     });
 
     const reply = response.text;
 
-    console.log("Gemini replied");
-
+    // Save AI response
     chat.messages.push({
       role: "assistant",
       content: reply,
     });
 
-    console.log("Saving chat...");
-
     await chat.save();
-
-    console.log("Chat saved successfully:", chat._id);
 
     res.json({
       reply,
+      chatId: chat._id,
     });
   } catch (error) {
     console.error("Chat error:", error.message);
