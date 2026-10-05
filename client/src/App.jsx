@@ -4,6 +4,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
+  const [chatId, setChatId] = useState(null);
 
   const sendMessage = async () => {
     if (!message.trim()) return;
@@ -17,9 +18,10 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+         body: JSON.stringify({
           message: message,
-        }),
+          chatId: chatId,
+          }),
       });
 
       const data = await response.json();
@@ -29,9 +31,11 @@ function App() {
       }
 
       setReply(data.reply);
+       setChatId(data.chatId);
     } catch (error) {
       console.error(error);
       setReply("Something went wrong ❌");
+     
     } finally {
       setLoading(false);
     }
